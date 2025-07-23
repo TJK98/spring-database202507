@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest   // 의존 객체를 테스트시 주입 받기 위한 설정
+@SpringBootTest   // 의존 객체를 테스트시에 주입받기위한 설정
 class BookTest {
 
     @Autowired // 필드 주입
@@ -21,10 +21,10 @@ class BookTest {
 
     @Test
     void insertTest() {
-        // 책 한 권의 데이터를 DB에 실제로 저장
+        // 책 한권의 데이터를 DB에 실제로 저장
         // DB를 연결
         try (Connection conn = dataSource.getConnection()) {
-            // 1. 데이터베이스 소켓 연결 - DB에 인증 정보를 주고 확인 받는 작업
+            // 1. 데이터베이스 소켓 연결 - DB에 인증정보를 주고 확인받는 작업
 
             // 2. SQL 작성
             String sql = """
@@ -99,7 +99,7 @@ class BookTest {
         }
     }
 
-    // 전체 조회
+    // 전체조회
     @Test
     void findAllTest() {
         try (Connection conn = dataSource.getConnection()) {
