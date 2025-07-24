@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>🍕 피자 메뉴 관리</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" href="/pizza/pizza-style.css">
+</head>
+<body>
+
+    <h1>🍕 피자 메뉴 등록</h1>
+
+    <form id="pizza-form">
+        <input type="text" id="name" placeholder="피자 이름" required>
+        <input type="text" id="description" placeholder="설명">
+        <input type="number" id="price" placeholder="가격" step="0.01" required>
+        <button type="submit">등록</button>
+    </form>
+
+    <hr>
+
+    <h2>📄 전체 피자 목록</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>설명</th>
+            <th>가격</th>
+            <th>판매중</th>
+            <th>등록일</th>
+            <th>수정일</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+        <tbody id="pizza-tbody">
+        <!-- JS로 데이터 삽입 -->
+        </tbody>
+    </table>
+
+    <!-- JS 연결 -->
+    <script src="/pizza/pizza.js"></script>
+
+</body>
+</html>
