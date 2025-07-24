@@ -1,19 +1,24 @@
 package com.spring.database.chap01.api;
 
 import com.spring.database.chap01.entity.Book;
+import com.spring.database.chap01.repository.BookJdbcRepository;
 import com.spring.database.chap01.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/books")
-@RequiredArgsConstructor
 @Slf4j
 public class BookController {
 
     private final BookRepository bookRepository;
+
+    public BookController(@Qualifier("bsr") BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     // 전체 조회 요청
     @GetMapping
