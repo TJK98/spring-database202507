@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace에는 연결할 인터페이스의 풀네임(페키지명 + 클래스명)을 작성 -->
+<mapper namespace="com.spring.database.chap03.PetMapper">
+
+    <!--  id에는 연결된 인터페이스의 추성 메서드 이름을 정확하게 적음, ;(세미클론)을 쓰면 안 된다  -->
+
+<!--    // CREATE
+    boolean save(Pet pet);-->
+    <insert id="save">
+        INSERT INTO tbl_pet
+            (pet_name, pet_age, injection)
+        VALUES
+            (#{petName}, #{petAge}, #{injection})
+    </insert>
+
+<!--    // UPDATE
+    boolean update(Pet pet);-->
+    <update id="update">
+        UPDATE tbl_pet
+        SET
+            pet_name = #{petName}
+            , pet_age = #{petAge}
+            , injection = #{injection}
+        WHERE id = #{id}
+    </update>
+
+<!--    // DELETE
+    boolean deleteById(Long id);-->
+    <delete id="deleteById">
+        DELETE FROM tbl_pet
+        WHERE id = #{id}
+    </delete>
+
+    <!--  resultType: 결과 테이블을 어떤 자바 객체에 연결할 건지  -->
+<!--    // READ - SINGLE MATCHING
+    Pet findById(Long id);-->
+    <select id="findById" resultType="Pet">
+        SELECT *
+        FROM tbl_pet
+        WHERE id = #{id}
+    </select>
+
+<!--    // READ - Multiple MATCHING
+    List<Pet> findAll();-->
+    <select id="findAll" resultType="Pet">
+        SELECT *
+        FROM tbl_pet
+        ORDER BY pet_name
+    </select>
+
+<!--    // READ - COUNT
+    int petCount();-->
+    <select id="petCount" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_pet
+    </select>
+
+</mapper>
