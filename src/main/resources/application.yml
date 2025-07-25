@@ -9,6 +9,13 @@ spring:
     username: root
     password: mariadb
 
+# MyBatis Setting
+mybatis:
+  # SQL file location
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
 logging:
   level:
     root: INFO
