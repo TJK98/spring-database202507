@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.database.chap02.ProductMapper">
+
+    <!--
+      INSERT 문
+      - 새로운 상품(Product)을 PRODUCTS 테이블에 저장함
+      - parameterType으로 전달받는 자바 객체의 필드명과 #{필드명}이 매핑됨
+    -->
+    <insert id="save" parameterType="com.spring.database.chap02.entity.Product">
+        INSERT INTO PRODUCTS
+        (name, price, stock_quantity, description, seller)
+        VALUES
+        (#{name}, #{price}, #{stockQuantity}, #{description}, #{seller})
+    </insert>
+
+    <!--
+      UPDATE 문
+      - 기존 상품 정보 수정
+      - id 기준으로 특정 상품을 찾아 수정
+      - 필드명이 CamelCase(예: stockQuantity)인 경우, DB 컬럼명이 snake_case(예: stock_quantity)라면
+        매퍼 설정에서 자동 매핑 또는 alias가 필요할 수 있음
+    -->
+    <update id="update" parameterType="com.spring.database.chap02.entity.Product">
+        UPDATE PRODUCTS
+        SET name = #{name}
+        , price = #{price}
+        , stock_quantity = #{stockQuantity}
+        , description = #{description}
+        , seller = #{seller}
+        WHERE id = #{id}
+    </update>
+
+    <!--
+      논리적 삭제 처리 (Soft Delete)
+      - 실제 데이터를 삭제하지 않고 상태만 'DELETED'로 변경함
+      - parameterType은 단일 기본 타입(Long)일 경우 생략 가능하지만, 명시적으로 작성함
+    -->
+    <update id="deleteById" parameterType="long">
+        UPDATE PRODUCTS
+        SET status = 'DELETED'
+        WHERE id = #{id}
+    </update>
+
+    <!--
+      전체 상품 조회 (단, 삭제된 상품 제외)
+      - status가 'DELETED'가 아닌 상품만 조회
+      - XML에서는 '<>', '>', '<' 같은 특수기호를 반드시 이스케이프 처리해야 함
+        (예: '<>' → &lt;&gt;)
+    -->
+    <select id="findAll"
+            resultType="com.spring.database.chap02.entity.Product">
+        SELECT * FROM PRODUCTS
+        WHERE status &lt;&gt; 'DELETED'
+    </select>
+
+    <!--
+      가격 통계 정보 조회
+      - 전체 상품 중 ACTIVE 상태인 상품들의 가격 정보를 집계
+      - 반환 타입은 총합, 평균 정보를 담는 DTO (PriceInfo)로 매핑됨
+    -->
+    <select id="getPriceInfo"
+            resultType="com.spring.database.chap02.dto.PriceInfo">
+        SELECT
+        SUM(price) AS total_price,
+        AVG(price) AS average_price
+        FROM PRODUCTS
+        WHERE status = 'ACTIVE'
+    </select>
+
+</mapper>
