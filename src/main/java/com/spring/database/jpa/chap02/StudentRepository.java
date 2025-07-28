@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-// JpaRepository의 제네릭에는 첫번째는 엔터이, 두번째는 아이디 타입
+// JpaRepository의 제네릭에는 첫번째는 엔터티, 두번째는 아이디 타입
 public interface StudentRepository extends JpaRepository<Student, String> {
 
     // Query Method: 메서드에 특별한 이름 규칙을 사용해서 SQL을 생성, 필드명을 적어야 한다.
