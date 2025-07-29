@@ -1,12 +1,12 @@
-package com.spring.database.jpa.chap02;
+package com.spring.database.jpa.chap02.repostitory;
 
 import com.spring.database.jpa.chap02.entity.Student;
+import com.spring.database.jpa.chap02.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 //@Transactional
 class StudentRepositoryTest {
 
-    @Autowired StudentRepository studentRepository;
+    @Autowired
+    StudentRepository studentRepository;
 
     @BeforeEach
     void bulkSave() {
@@ -76,6 +77,29 @@ class StudentRepositoryTest {
         String containingMajor = "공학";
         //when
         List<Student> students = studentRepository.findByMajorContaining(containingMajor);
+        //then
+        students.forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("JPQL로 조회해보기")
+    void jpqlTest() {
+        //given
+        String city = "서울시";
+        //when
+        List<Student> students = studentRepository.getStudentsByCity(city);
+        //then
+        students.forEach(System.out::println);
+    }
+
+    @Test
+    @DisplayName("순수 SQL로 조회하기")
+    void nativeSQLTest() {
+        //given
+        String city = "제주도";
+        String name = "어피치";
+        //when
+        List<Student> students = studentRepository.getStudents(city, name);
         //then
         students.forEach(System.out::println);
     }
