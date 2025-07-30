@@ -52,7 +52,9 @@ public class Department {
 
         - orphanRemoval : 고아 객체 삭제 - 부모와의 연결이 끊어진 자식객체를 데이터베이스에서 삭제
      */
-    @OneToMany(mappedBy = "department") // 단 방향이 걸려있어야 양뱡향 설정이 가능하다. 양방향을 필수가 아닌 편의성을 위해 사용을 해도 된다. 상대방 엔터티에 @ManyToOne에 대응되는 필드명을 꼭 적어야 한다.
+
+    // 단 방향이 걸려있어야 양뱡향 설정이 가능하다. 양방향을 필수가 아닌 편의성을 위해 사용을 해도 된다. 상대방 엔터티에 @ManyToOne에 대응되는 필드명을 꼭 적어야 한다.
+    @OneToMany(mappedBy = "department",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Employee> employees = new ArrayList<>(); // 초기화를 자동으로 해주지 않기 때문에 초기화도 필수이다.
 
 //    @Override
@@ -63,4 +65,10 @@ public class Department {
 //               ", employees=" + employees.toString() +
 //               '}';
 //    }
+
+    // 양방향 매핑 리스트에 사원을 추가할 때 사용할 편의 메서드 (혹시나 까먹을 수도 있는 부서 세팅을 위하여)
+    public void addEmployee(Employee employee) {
+        employee.setDepartment(this);
+        this.employees.add(employee);
+    }
 }

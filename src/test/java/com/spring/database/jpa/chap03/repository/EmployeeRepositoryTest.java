@@ -20,8 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Rollback(false)
 class EmployeeRepositoryTest {
 
-    @Autowired EmployeeRepository employeeRepository;
-    @Autowired DepartmentRepository departmentRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
+    @Autowired
+    DepartmentRepository departmentRepository;
     @Autowired
     EntityManager em;
 
@@ -68,7 +70,7 @@ class EmployeeRepositoryTest {
         em.flush();
         em.clear();
     }
-    
+
     @Test
     @DisplayName("특정 사원의 정보를 조회하면 부서 정보도 같이 조회된다.")
     void findTest() {
@@ -118,11 +120,96 @@ class EmployeeRepositoryTest {
 
         employeeRepository.save(foundEmp);
         //then
-        System.out.println("변경 후 사원 정보 =" +foundEmp + foundEmp.getDepartment());
-        
+        System.out.println("변경 후 사원 정보 =" + foundEmp + foundEmp.getDepartment());
+
         // 1번 부서의 사원 정보를 다시 조회 -> 예상 : 3명
         List<Employee> employees = foundDept.getEmployees();
         System.out.println("\nemployees = " + employees);
         System.out.println("employees.size = " + employees.size());
+
+    }
+
+    @Test
+    @DisplayName("부서가 제거되면 CASCADE REMOVE에 의해 해당 부서 사원이 모두 삭제된다")
+    void cascadeTest() {
+        //given
+        Long deptId = 1L;
+        //when
+        departmentRepository.deleteById(deptId);
+        //then
+    }
+
+    @Test
+    @DisplayName("양방향 매핑 리스트에서 사원을 추가하면 DB에도 INSERT 된다.")
+    void persistTest() {
+        //given
+        // 부서 조회
+        Department department = departmentRepository.findById(2L).orElseThrow();
+        // 새로운 사원 생성
+        Employee employee = Employee.builder()
+                .name("파이리")
+                //.department(department)
+                .build();
+        //when
+        //employeeRepository.save(employee);
+        department.addEmployee(employee);
+
+        em.flush();
+        em.clear();
+        //then
+        Employee foundEmp = employeeRepository.findById(5L).orElseThrow();
+        System.out.println("foundEmp = " + foundEmp);
+        System.out.println("foundEmp.getDepartment() = " + foundEmp.getDepartment());
+    }
+    
+    @Test
+    @DisplayName("양방향 매핑 리스트에서 사원을 제거하면 실제 DB에서 DELETE 된다.")
+    void orphanRemovalTest() {
+        //given
+        // 1번 부서 조회
+        Department foundDept = departmentRepository.findById(1L).orElseThrow();
+        // 1번 부서의 모든 사원 조회
+        /*
+            SELECT *
+            FROM tbl_emp
+            WHERE dept_id = 1
+         */
+        //List<Employee> employees = employeeRepository.findByDeptId(1L);
+        List<Employee> employees = foundDept.getEmployees();
+        employees.forEach(System.out::println);
+
+        // 1번 사원을 지우고 싶음
+        //employeeRepository.deleteById(1L);
+        employees.remove(0);
+        //when
+        
+        //then
+    }
+
+    @Test
+    @DisplayName("N + 1 문제 확인")
+    void nPlusOneTest() {
+        //given
+
+        //when
+        List<Department> departments = departmentRepository.findAll();
+        //then
+        departments.forEach(dept -> {
+            System.out.println("dept + dept.getEmployees() = "
+            + dept + dept.getEmployees());
+        });
+    }
+
+    @Test
+    @DisplayName("N + 1 문제 해결을 위한 fetch join")
+    void fetchJoinTest() {
+        //given
+
+        //when
+        List<Department> departments = departmentRepository.findAllByFetch();
+        //then
+        departments.forEach(d -> {
+            System.out.println("d + d.getEmployess() = " + d + d.getEmployees());
+        });
     }
 }
