@@ -28,5 +28,7 @@ public class Comment {
     // - 연관관계의 주인입니다. (외래키를 가짐)
     // - 지연 로딩(LAZY)을 설정하는 것이 성능에 유리합니다.
     // - @JoinColumn을 사용하여 외래키 컬럼명을 'post_id'로 지정하세요.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
     private Post post;
 }

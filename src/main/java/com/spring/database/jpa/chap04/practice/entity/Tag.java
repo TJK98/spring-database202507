@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +27,7 @@ public class Tag {
 
     // TODO: PostTag와의 1:N 관계 설정 (다대다 해결)
     // - Tag가 삭제되면 PostTag도 함께 삭제되어야 합니다.
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<PostTag> postTags = new ArrayList<>();
 }
