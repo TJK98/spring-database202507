@@ -113,10 +113,10 @@ class QueryDslBasicTest {
         //when
         Idol foundIdol = jdbcTemplate.queryForObject(sql,
                 (rs, n) -> new Idol(
-                        rs.getLong("idol_id")
-                        , rs.getString("idol_name")
-                        , rs.getInt("age")
-                        , null
+//                        rs.getLong("idol_id")
+//                        , rs.getString("idol_name")
+//                        , rs.getInt("age")
+//                        , null
                 ),
                 "김채원"
         );
@@ -125,9 +125,9 @@ class QueryDslBasicTest {
                         SELECT * FROM tbl_group WHERE group_id = ?
                         """,
                 (rs, n) -> new Group(
-                        rs.getLong("group_id")
-                        , rs.getString("group_name")
-                        , null
+//                        rs.getLong("group_id")
+//                        , rs.getString("group_name")
+//                        , null
                 ),
                 1
         );
