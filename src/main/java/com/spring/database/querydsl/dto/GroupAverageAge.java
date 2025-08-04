@@ -1,5 +1,6 @@
 package com.spring.database.querydsl.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.querydsl.core.Tuple;
 import com.spring.database.querydsl.entity.QIdol;
 import lombok.*;
@@ -15,8 +16,10 @@ import lombok.*;
 // 그룹명과 평균 나이를 매핑할 클래스
 public class GroupAverageAge {
 
+    @JsonProperty("name")
     private String groupName;
-    private double averageAge;
+    @JsonProperty("age")
+    private Double averageAge;
 
     // Tuple을 전달 받아서 DTO로 변환하는 생성자
     public GroupAverageAge(Tuple tuple) {
